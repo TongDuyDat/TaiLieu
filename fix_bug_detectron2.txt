@@ -1,0 +1,25 @@
+Khi cài đặt detectron2 (phiên bản mới nhất của MaskRCNN) trong Windows 10, tôi gặp phải lỗi: detectron2 ImportError: không thể nhập tên '_C' từ 'Detectron2
+Giải thích p:
+Chuyển sang thư mục chứa tệp setup.py, sau đó nhập lệnh trong terminal lệnh:python setup.py build develop
+
+Nếu xảy ra lỗi sau:
+error: command 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin\nvcc.exe' không thành công với trạng thái thoát 1
+
+Cách giải quyết: Nội dung
+file gốc như sau:
+detectron2\layers\csrc\nms_rotated\nms_rotated_cuda.cudetectron2\layers\csrc\nms_rotated\nms_rotated_cuda.cu
+
+code
+
+#include &lt;ATen/ATen.h&gt;
+#include &lt;ATen/cuda/CUDAContext.h&gt;
+#include &lt;c10/cuda/CUDAGuard.h&gt;
+#include &lt;ATen/cuda/CUDAApplyUtils.cuh&gt;
+/*#ifdef WITH_CUDA
+#include "../box_iou_rotated/box_iou_rotated_utils.h"
+#endif
+// TODO avoid this when pytorch supports "same directory" hipification
+#ifdef WITH_HIP
+#include "box_iou_rotated/box_iou_rotated_utils.h"
+#endif*/
+#include "box_iou_rotated/box_iou_rotated_utils.h"
